@@ -39,5 +39,5 @@ OK
 4.  **Wait:** The automation will run immediately. Within a few seconds, the PR description will automatically update with:
     *   A summary of changes.
     *   Technical implementation details.
-    *   Linked issue
+    *   Linked issues.
     *   A clean changelog.
