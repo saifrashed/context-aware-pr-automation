@@ -1,6 +1,6 @@
 # Context Aware PR Automation
 
-
+## Setup
 1. Generate OpenAI API key
 - Go to platform.openai.com/api-keys.
 - Log in (or sign up).
@@ -17,3 +17,24 @@
 3. Add to Secrets:
 - Go to Repo Settings -> Secrets and variables -> Actions.
 - Add New Repository Secret: PAT_KEY & OPENAI_API_KEY.
+
+
+## Run example scripts
+
+1. Run the app:
+```
+python main.py
+```
+2. Run the tests:
+```
+python test.py
+```
+
+3. Expected Output for test.py:
+```
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.000s
+
+OK
+```
