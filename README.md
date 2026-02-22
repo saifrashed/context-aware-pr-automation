@@ -35,10 +35,9 @@ OK
 ## 🚀 Usage
 1.  **Create & Commit:** Work on your feature branch and push your changes to GitHub.
 2.  **Open Pull Request:** Go to the "Pull requests" tab and click "New pull request."
-3.  **Link Project:** **Important:** Select your project from the "Projects" sidebar *before* clicking "Create pull request."
+3.  **Link Project:** **Important:** Use [Github keywords](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue) to link the issue with the pull request (e.g. add 'Closes #6' in title) and then create the pull request.
 4.  **Wait:** The automation will run immediately. Within a few seconds, the PR description will automatically update with:
     *   A summary of changes.
     *   Technical implementation details.
     *   Linked issues.
     *   A clean changelog.
-5.  **Update (Optional):** If you push new code or link a project later, just re-run the "AI PR Description" workflow from the Actions tab to regenerate the report.
