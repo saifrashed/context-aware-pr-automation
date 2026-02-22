@@ -1,3 +1,11 @@
+# My Project Name
+
+```text
+    _    _   ___  ___   ___  _____  _   
+   /_\  | | | _ \| _ \ / __||_   _|/_\  
+  / _ \ | | |  _/|   / \__ \  | | / _ \ 
+ /_/ \_\|_| |_|  |_|_\ |___/  |_|/_/ \_\
+```
 # Context Aware PR Automation
 This project creates an automated GitHub Actions workflow that detects new Pull Requests and uses a Python script to aggregate code diffs, commit history, and linked project data. It then sends this context to the OpenAI API to generate and publish a structured, professional PR description, saving developers time and enforcing consistent documentation.
 
