@@ -47,7 +47,6 @@ def get_project_items():
 
 def generate_description():
     # 1. Gather Context
-    print("Gathering context...")
     diff = get_pr_diff()
     commits = get_commit_log()
     projects = get_project_items()
@@ -81,7 +80,6 @@ def generate_description():
     """
 
     # 3. Call OpenAI
-    print("Calling OpenAI...")
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}",
         "Content-Type": "application/json"
