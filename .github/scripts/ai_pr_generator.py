@@ -17,10 +17,20 @@ if not OPENAI_API_KEY:
 
 def run_command(command):
     try:
-        result = subprocess.run(command, shell=True, check=True, capture_output=True, text=True)
+        # We capture stderr so we can see what went wrong in the logs
+        result = subprocess.run(
+            command, 
+            shell=True, 
+            check=True, 
+            stdout=subprocess.PIPE, 
+            stderr=subprocess.PIPE,
+            text=True
+        )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
-        return ""
+        print(f"Command failed: {command}")
+        print(f"Error output: {e.stderr}")
+        return "" # Return empty string on failure
 
 def get_pr_diff():
     # Limit diff to 3000 chars to save tokens and prevent errors
