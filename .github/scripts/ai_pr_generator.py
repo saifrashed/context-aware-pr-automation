@@ -43,25 +43,17 @@ def get_commit_log():
     return run_command("git log --pretty=format:'- %s (%an)' origin/main..HEAD")
 
 def get_linked_issues():
+    # Strategy 1: check if GitHub already knows about links (e.g. manual sidebar link)
     try:
-        cmd = f"gh pr view {PR_NUMBER} --json title,body,closingIssuesReferences"
+        cmd = f"gh pr view {PR_NUMBER} --json closingIssuesReferences"
         data = run_command(cmd)
-        
-        if not data:
-            return "No linked issues data returned."
-
         json_data = json.loads(data)
-        issues = json_data.get("closingIssuesReferences", [])
+        existing_issues = json_data.get("closingIssuesReferences", [])
         
-        if not issues:
-            return "No linked issues found."
-            
-        return "\n".join([f"- **#{i['number']}**: {i['title']}" for i in issues])
-
-    except json.JSONDecodeError:
-        return "Error parsing issue data from GitHub CLI."
-    except Exception as e:
-        return f"Could not fetch linked issues: {str(e)}"
+        if existing_issues:
+             return "\n".join([f"- **#{i['number']}**: {i['title']}" for i in existing_issues])
+    except:
+        return "No linked issues found."
 
 def generate_description():
     # 1. Gather Context
