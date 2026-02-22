@@ -1,0 +1,39 @@
+name: Auto Create PR
+on:
+  push:
+    branches:
+      - 'feature/*' # Triggers on any feature branch push
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1. Trigger Actions (Run logic/scripts)
+      - name: Run Analysis Script
+        id: analysis
+        run: |
+          # Run your logic here
+          COVERAGE=$(npm run coverage --silent | grep "Lines")
+          echo "coverage_result=$COVERAGE" >> $GITHUB_OUTPUT
+
+      # 2. Open the PR with prefilled dynamic body
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Auto-PR: Changes from ${{ github.ref_name }}"
+          branch: ${{ github.ref_name }}
+          base: main
+          body: |
+            ## Automated PR
+            This PR was automatically opened by GitHub Actions.
+            
+            ### 📊 Stats
+            - Coverage: ${{ steps.analysis.outputs.coverage_result }}
+            - Triggered by: @${{ github.actor }}
