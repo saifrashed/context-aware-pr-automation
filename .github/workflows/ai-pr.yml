@@ -1,0 +1,73 @@
+name: AI PR Description
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  repository-projects: read # Needed for fetching Project info
+
+jobs:
+  auto-fill:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Needed for git diff
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Generate AI Description
+        id: openai
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          # Run python script and capture output to a file
+          python .github/scripts/ai_pr_generator.py > ai_output.md
+
+      - name: Update PR Body
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            
+            let aiContent = "";
+            try {
+              aiContent = fs.readFileSync('ai_output.md', 'utf8');
+            } catch (err) {
+              console.log("No AI output generated.");
+              return;
+            }
+
+            // Get current PR
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            // If you want to Append:
+            const newBody = pr.body + "\n\n" + aiContent;
+            
+            // If you want to completely Replace the body, use:
+            // const newBody = aiContent;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              body: newBody
+            });
