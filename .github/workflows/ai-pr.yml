@@ -2,12 +2,15 @@ name: AI PR Description
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize, reopened]
+    # This triggers when you edit the PR (like adding a project)
+    # or when you just want to re-run it manually.
+  workflow_dispatch: # Allows manual button click
 
 permissions:
   contents: read
   pull-requests: write
-  repository-projects: read # Needed for fetching Project info
+  repository-projects: read
 
 jobs:
   auto-fill:
@@ -16,7 +19,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Needed for git diff
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5

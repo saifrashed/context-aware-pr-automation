@@ -1,11 +1,3 @@
-# My Project Name
-
-```text
-    _    _   ___  ___   ___  _____  _   
-   /_\  | | | _ \| _ \ / __||_   _|/_\  
-  / _ \ | | |  _/|   / \__ \  | | / _ \ 
- /_/ \_\|_| |_|  |_|_\ |___/  |_|/_/ \_\
-```
 # Context Aware PR Automation
 This project creates an automated GitHub Actions workflow that detects new Pull Requests and uses a Python script to aggregate code diffs, commit history, and linked project data. It then sends this context to the OpenAI API to generate and publish a structured, professional PR description, saving developers time and enforcing consistent documentation.
 
@@ -47,3 +39,14 @@ Ran 5 tests in 0.000s
 
 OK
 ```
+
+## 🚀 Usage
+1.  **Create & Commit:** Work on your feature branch and push your changes to GitHub.
+2.  **Open Pull Request:** Go to the "Pull requests" tab and click "New pull request."
+3.  **Link Project:** **Important:** Select your project from the "Projects" sidebar *before* clicking "Create pull request."
+4.  **Wait:** The automation will run immediately. Within a few seconds, the PR description will automatically update with:
+    *   A summary of changes.
+    *   Technical implementation details.
+    *   Linked project tasks.
+    *   A clean changelog.
+5.  **Update (Optional):** If you push new code or link a project later, just re-run the "AI PR Description" workflow from the Actions tab to regenerate the report.
