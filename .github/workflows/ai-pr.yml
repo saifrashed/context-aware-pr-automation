@@ -2,8 +2,8 @@ name: AI PR Description
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-    # This triggers when you edit the PR (like adding a project)
+    types: [opened, synchronize, reopened, edited]    
+    # This triggers when you edit the PR (like adding a issue)
     # or when you just want to re-run it manually.
   workflow_dispatch: # Allows manual button click
 
