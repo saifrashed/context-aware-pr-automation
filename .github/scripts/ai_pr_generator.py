@@ -32,24 +32,28 @@ def get_pr_diff():
 def get_commit_log():
     return run_command("git log --pretty=format:'- %s (%an)' origin/main..HEAD")
 
-def get_project_items():
-    # Requires GH_TOKEN to be set in env
+def get_linked_issues():
+    # Fetch issues linked via "Closes #123" or manually linked in UI
     try:
-        cmd = f"gh pr view {PR_NUMBER} --json projectItems"
+        # We need the body to check for "Closes #" text AND the API for linked issues
+        cmd = f"gh pr view {PR_NUMBER} --json title,body,closingIssuesItems"
         data = run_command(cmd)
         json_data = json.loads(data)
-        items = json_data.get("projectItems", [])
-        if not items:
-            return "No linked GitHub Project items."
-        return "\n".join([f"- {item['title']} (Status: {item['status']['name']})" for item in items])
-    except:
-        return "Could not fetch project items."
+        
+        issues = json_data.get("closingIssuesItems", [])
+        
+        if not issues:
+            return "No linked issues found."
+            
+        return "\n".join([f"- **#{i['number']}**: {i['title']}" for i in issues])
+    except Exception as e:
+        return f"Could not fetch linked issues: {str(e)}"
 
 def generate_description():
     # 1. Gather Context
     diff = get_pr_diff()
     commits = get_commit_log()
-    projects = get_project_items()
+    issues = get_linked_issues()
     
     with open(TEMPLATE_PATH, "r") as f:
         template = f.read()
@@ -64,8 +68,8 @@ def generate_description():
     {template}
     
     CONTEXT:
-    1. Linked Project Items:
-    {projects}
+    1. Linked Issues:
+    {issues}
     
     2. Commit History:
     {commits}

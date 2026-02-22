@@ -8,16 +8,8 @@ This project creates an automated GitHub Actions workflow that detects new Pull 
 - Click "Create new secret key".
 - Name it something like "GitHub PR Action".
 - Copy the key immediately (starts with sk-...). You won't be able to see it again.
-
-2. Generate Github Personal Access Token
-- Go to Settings (Profile) -> Developer Settings -> Personal Access Tokens -> Tokens (Classic).
-- Generate New Token (Classic).
-- Scopes: Check repo, read:org, and crucially read:project (or project).
-- Copy the token (ghp_...).
-
-3. Add to Secrets:
 - Go to Repo Settings -> Secrets and variables -> Actions.
-- Add New Repository Secret: PAT_KEY & OPENAI_API_KEY.
+- Add New Repository Secret: OPENAI_API_KEY.
 
 
 ## Run example scripts
@@ -47,6 +39,6 @@ OK
 4.  **Wait:** The automation will run immediately. Within a few seconds, the PR description will automatically update with:
     *   A summary of changes.
     *   Technical implementation details.
-    *   Linked project tasks.
+    *   Linked issues.
     *   A clean changelog.
 5.  **Update (Optional):** If you push new code or link a project later, just re-run the "AI PR Description" workflow from the Actions tab to regenerate the report.

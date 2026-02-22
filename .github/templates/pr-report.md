@@ -3,8 +3,8 @@
 ## 📝 Summary
 <!-- OpenAI will summarize the changes here -->
 
-## 🔗 Linked Tasks
-<!-- OpenAI will list linked project items here -->
+## 🔗 Linked issues
+<!-- OpenAI will list linked issues here -->
 
 ## 🛠 Technical Details
 <!-- OpenAI will explain the technical implementation based on the diff -->
