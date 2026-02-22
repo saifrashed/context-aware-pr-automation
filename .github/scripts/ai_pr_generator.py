@@ -45,7 +45,12 @@ def get_commit_log():
 def get_linked_issues():
     # Strategy 1: check if GitHub already knows about links (e.g. manual sidebar link)
     try:
-        cmd = f"gh pr view {PR_NUMBER} --json closingIssuesReferences"
+        cmd = (
+            f"gh pr view {PR_NUMBER} --json closingIssuesReferences "
+            "--jq '.closingIssuesReferences[].number' "
+            "| xargs -I {{}} gh issue view {{}} --json number,title "
+            "--jq '{{number, title}}'"
+        )
         data = run_command(cmd)
         json_data = json.loads(data)
         existing_issues = json_data.get("closingIssuesReferences", [])
