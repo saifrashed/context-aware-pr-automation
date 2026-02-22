@@ -1,0 +1,64 @@
+name: Enrich PR Description
+
+on:
+  pull_request:
+    types: [opened] # Only triggers when first created
+
+permissions:
+  contents: read        # To read the script and code
+  pull-requests: write  # To update the PR description
+
+jobs:
+  update-description:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history so git diff works
+
+      - name: Run Script & Generate Output
+        id: generate
+        run: |
+          # Make script executable just in case
+          chmod +x .github/scripts/generate-pr-details.sh
+          
+          # Run script and save output to a temporary file
+          .github/scripts/generate-pr-details.sh > pr_content.md
+
+      - name: Update Pull Request Body
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            
+            // 1. Read the output from your shell script
+            let scriptOutput = "";
+            try {
+              scriptOutput = fs.readFileSync('pr_content.md', 'utf8');
+            } catch (err) {
+              console.log("No output file generated, skipping update.");
+              return;
+            }
+
+            // 2. Get the current PR details
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            // 3. Construct the new body 
+            // We append the new info to the user's existing description
+            const existingBody = pr.body || ""; // Handle empty descriptions
+            const separator = "\n\n---\n";      // A visual divider
+            const newBody = existingBody + separator + scriptOutput;
+
+            // 4. Update the PR
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              body: newBody
+            });
